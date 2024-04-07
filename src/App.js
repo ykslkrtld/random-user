@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useEffect, useState } from "react";
 import mailSvg from "./assets/mail.svg";
 import manSvg from "./assets/man.svg";
 import womanSvg from "./assets/woman.svg";
@@ -12,17 +13,32 @@ const url = "https://randomuser.me/api/";
 const defaultImage = "https://randomuser.me/api/portraits/men/75.jpg";
 
 function App() {
+
+  const [user, setUser] = useState("")
+
+  const getUser = async () => {
+    const res = await fetch(url)
+    const data = await res.json()
+    console.log(data.results[0].gender)
+    setUser(data.results[0])
+  }
+
+  useEffect(() => {
+    getUser()
+  }, [])
+  
   return (
     <main>
       <div className="block bcg-orange">
+        <h1 className="mt-5">Random User</h1>
       </div>
       <div className="block">
         <div className="container">
-          <img src={defaultImage} alt="random user" className="user-img" />
+          <img src={user?.picture?.large} alt="random user" className="user-img" />
           <p className="user-title">My ... is</p>
-          <p className="user-value"></p>
+          <p className="user-value">deneme</p>
           <div className="values-list">
-            <button className="icon" data-label="name">
+            <button onMouseOver={user?.name} className="icon" data-label="name">
               <img src={womanSvg} alt="user" id="iconImg" />
             </button>
             <button className="icon" data-label="email">
@@ -42,7 +58,7 @@ function App() {
             </button>
           </div>
           <div className="btn-group">
-            <button className="btn" type="button">
+            <button onClick={getUser} className="btn" type="button">
               new user
             </button>
             <button className="btn" type="button">

@@ -116,6 +116,10 @@ p {
   text-align: center;
 }
 
+.bcg-orange h1{
+  padding: 3rem;
+}
+
 .container {
   width: 90vw;
   min-width: 300px;
