@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import mailSvg from "./assets/mail.svg";
 import manSvg from "./assets/man.svg";
@@ -10,23 +9,26 @@ import phoneSvg from "./assets/phone.svg";
 import padlockSvg from "./assets/padlock.svg";
 
 const url = "https://randomuser.me/api/";
-const defaultImage = "https://randomuser.me/api/portraits/men/75.jpg";
+// const defaultImage = "https://randomuser.me/api/portraits/men/75.jpg";
 
 function App() {
-
-  const [user, setUser] = useState("")
+  const [user, setUser] = useState("");
+  const [userValue, setUserValue] = useState("");
+  const [userTitle, setUserTitle] = useState("");
 
   const getUser = async () => {
-    const res = await fetch(url)
-    const data = await res.json()
-    console.log(data.results[0].gender)
-    setUser(data.results[0])
-  }
+    const res = await fetch(url);
+    const data = await res.json();
+    const userData = data.results[0];
+    setUser(userData); 
+    setUserValue(`${userData.name.first} ${userData.name.last}`);
+    setUserTitle("name");
+  };
 
   useEffect(() => {
-    getUser()
-  }, [])
-  
+    getUser();
+  }, []);
+
   return (
     <main>
       <div className="block bcg-orange">
@@ -34,26 +36,80 @@ function App() {
       </div>
       <div className="block">
         <div className="container">
-          <img src={user?.picture?.large} alt="random user" className="user-img" />
-          <p className="user-title">My ... is</p>
-          <p className="user-value">deneme</p>
+          <img
+            src={user?.picture?.large}
+            alt="random user"
+            className="user-img"
+          />
+          <p className="user-title">My {userTitle} is</p>
+          <p className="user-value">{userValue}</p>
           <div className="values-list">
-            <button onMouseOver={user?.name} className="icon" data-label="name">
-              <img src={womanSvg} alt="user" id="iconImg" />
+            <button
+              onMouseOver={() => {
+                setUserValue(`${user.name.first} ${user.name.last}`);
+                setUserTitle("name");
+              }}
+              className="icon"
+              data-label="name"
+            >
+              {user.gender === "female" ? (
+                <img src={womanSvg} alt="user" id="iconImg" />
+              ) : (
+                <img src={manSvg} alt="user" id="iconImg" />
+              )}
             </button>
-            <button className="icon" data-label="email">
+            <button
+              onMouseOver={() => {
+                setUserValue(user.email);
+                setUserTitle("email");
+              }}
+              className="icon"
+              data-label="email"
+            >
               <img src={mailSvg} alt="mail" id="iconImg" />
             </button>
-            <button className="icon" data-label="age">
-              <img src={womanAgeSvg} alt="age" id="iconImg" />
+            <button
+              onMouseOver={() => {
+                setUserValue(user.dob.age);
+                setUserTitle("age");
+              }}
+              className="icon"
+              data-label="age"
+            >
+              {user.gender === "female" ? (
+                <img src={womanAgeSvg} alt="user" id="iconImg" />
+              ) : (
+                <img src={manAgeSvg} alt="user" id="iconImg" />
+              )}
             </button>
-            <button className="icon" data-label="street">
+            <button
+              onMouseOver={() => {
+                setUserValue(user.location.city + "-" + user.location.country);
+                setUserTitle("location");
+              }}
+              className="icon"
+              data-label="street"
+            >
               <img src={mapSvg} alt="map" id="iconImg" />
             </button>
-            <button className="icon" data-label="phone">
+            <button
+              onMouseOver={() => {
+                setUserValue(user.phone);
+                setUserTitle("phone");
+              }}
+              className="icon"
+              data-label="phone"
+            >
               <img src={phoneSvg} alt="phone" id="iconImg" />
             </button>
-            <button className="icon" data-label="password">
+            <button
+              onMouseOver={() => {
+                setUserValue(user.login.password);
+                setUserTitle("password");
+              }}
+              className="icon"
+              data-label="password"
+            >
               <img src={padlockSvg} alt="lock" id="iconImg" />
             </button>
           </div>
@@ -76,13 +132,17 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              <tr className="body-tr"></tr>
+              <tr className="body-tr">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
             </tbody>
           </table>
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "center" }}>
-      </div>
+      <div style={{ display: "flex", justifyContent: "center" }}></div>
     </main>
   );
 }
