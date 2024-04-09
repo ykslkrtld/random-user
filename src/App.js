@@ -15,6 +15,7 @@ function App() {
   const [user, setUser] = useState("");
   const [userValue, setUserValue] = useState("");
   const [userTitle, setUserTitle] = useState("");
+  const [addUser, setAddUser] = useState([])
 
   const getUser = async () => {
     const res = await fetch(url);
@@ -24,6 +25,19 @@ function App() {
     setUserValue(`${userData.name.first} ${userData.name.last}`);
     setUserTitle("name");
   };
+
+  const handleAddUser = () => {
+    if(addUser.includes(user)){
+      alert("This user is already added.")
+    } else{
+    setAddUser([...addUser, user])
+    }}
+
+    const handleDelete = (userEmail) => {
+      const newList = addUser.filter((item) => item.email !== userEmail )
+      setAddUser(newList)
+
+    }
 
   useEffect(() => {
     getUser();
@@ -117,7 +131,7 @@ function App() {
             <button onClick={getUser} className="btn" type="button">
               new user
             </button>
-            <button className="btn" type="button">
+            <button onClick={handleAddUser} className="btn" type="button">
               add user
             </button>
           </div>
@@ -129,15 +143,19 @@ function App() {
                 <th className="th">Email</th>
                 <th className="th">Phone</th>
                 <th className="th">Age</th>
+                <th className="th">Delete</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="body-tr">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+              { addUser.map((user , index) => (
+                <tr key={index} className="body-tr">
+                <td>{user.name.first}</td>
+                <td>{user.email}</td>
+                <td>{user.phone}</td>
+                <td>{user.dob.age}</td>
+                <td><i onClick={()=> handleDelete(user.email)} class="fa-solid fa-trash"></i></td>
               </tr>
+              ))}
             </tbody>
           </table>
         </div>
