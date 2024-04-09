@@ -22,7 +22,7 @@ function App() {
     const data = await res.json();
     const userData = data.results[0];
     setUser(userData); 
-    setUserValue(`${userData.name.first} ${userData.name.last}`);
+    setUserValue(`${userData?.name?.first} ${userData?.name?.last}`);
     setUserTitle("name");
   };
 
@@ -45,8 +45,8 @@ function App() {
 
   return (
     <main>
-      <div className="block bcg-orange">
-        <h1 className="mt-5">Random User</h1>
+      <div className="block bcg-orange header">
+        <h1 className="mt-5 head">Random User</h1>
       </div>
       <div className="block">
         <div className="container">
